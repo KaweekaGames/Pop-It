@@ -20,10 +20,12 @@ public class TouchInput : MonoBehaviour {
             touchesOld = new GameObject[touchList.Count];
             touchList.CopyTo(touchesOld);
             touchList.Clear();
-           
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit, touchInputMask))
+            Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
+
+            if (hit)
             {
                 GameObject recipient = hit.transform.gameObject;
 
@@ -64,9 +66,11 @@ public class TouchInput : MonoBehaviour {
 
             foreach (Touch touch in Input.touches)
             {
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out hit, touchInputMask))
+                RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
+
+                if (hit)
                 {
                     GameObject recipient = hit.transform.gameObject;
 
@@ -75,7 +79,6 @@ public class TouchInput : MonoBehaviour {
                     if (touch.phase == TouchPhase.Began)
                     {
                         recipient.SendMessage("OnTouchDown", hit.point, SendMessageOptions.DontRequireReceiver);
-                        Debug.Log("hello");
                     }
 
                     if (touch.phase == TouchPhase.Ended)
