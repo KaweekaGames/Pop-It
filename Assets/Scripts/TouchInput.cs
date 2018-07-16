@@ -7,8 +7,7 @@ public class TouchInput : MonoBehaviour {
     public LayerMask touchInputMask;
     private List<GameObject> touchList = new List<GameObject>();
     private GameObject[] touchesOld;
-    private RaycastHit hit;
-   
+    private RaycastHit2D hit;
 
     void Update ()
     {
@@ -23,7 +22,7 @@ public class TouchInput : MonoBehaviour {
 
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
+            hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
 
             if (hit)
             {
@@ -68,7 +67,7 @@ public class TouchInput : MonoBehaviour {
             {
                 Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
+                hit = Physics2D.Raycast(worldPoint, Vector2.zero, touchInputMask);
 
                 if (hit)
                 {

@@ -12,6 +12,8 @@ public class ButtonTest : MonoBehaviour
     
     public void Test()
     {
-        text.text = puzzle.ReturnWord();
+        puzzle.StartRound();
+        text.text = puzzle.Category;
+
     }
 }
