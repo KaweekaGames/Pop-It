@@ -12,12 +12,16 @@ public class LetterTile : MonoBehaviour
     public string colliderTag;
     public Sprite[] sprites;
 
+    [SerializeField]
+    public bool locked = false;
+
     SpriteRenderer spriteRen;
     Vector2 targetPos;
     Vector2 parkedPos;
     bool touched = false;
     bool parked = false;
 
+    [SerializeField]
     char m_value;
     public char Value { get { return m_value; }}
 
@@ -37,7 +41,7 @@ public class LetterTile : MonoBehaviour
 
     private void Update()
     {
-        if (touched)
+        if (touched && !locked)
         {
             gameObject.MoveUpdate(targetPos, constantMoveTime);
         }
@@ -51,12 +55,12 @@ public class LetterTile : MonoBehaviour
     void OnTouchUp()
     {
         touched = false;
-        if (parked)
+        if (parked && !locked)
         {
             gameObject.MoveTo(parkedPos, time, delay);
         }
 
-        else
+        else if (!locked)
         {
             gameObject.MoveTo(m_homePos, time, delay, moveEase);
         }
@@ -64,18 +68,21 @@ public class LetterTile : MonoBehaviour
 
     void OnTouchStay(Vector2 point)
     {
-        targetPos = point;
+        if (!locked)
+        {
+            targetPos = point; 
+        }
     }
 
     void OnTouchCancel()
     {
         touched = false;
-        if (parked)
+        if (parked && !locked)
         {
             gameObject.MoveTo(parkedPos, time, delay);
         }
 
-        else
+        else if(!locked)
         {
             gameObject.MoveTo(m_homePos, time, delay);
         }
@@ -92,6 +99,11 @@ public class LetterTile : MonoBehaviour
                 parkedPos = tileLoc.Position;
                 parked = true;
                 tileLoc.occupied = true;
+
+                if(tileLoc.Value == Value)
+                {
+                    m_correct = true;
+                } 
             }
         }
     }
@@ -106,6 +118,7 @@ public class LetterTile : MonoBehaviour
             {
                 parked = false;
                 tileLoc.occupied = false;
+                m_correct = false;
             }
         }
     }
@@ -239,5 +252,21 @@ public class LetterTile : MonoBehaviour
                 spriteRen.sprite = sprites[26];
                 break;
         }
+    }
+
+    public void SendHome()
+    {
+        locked = false;
+        gameObject.MoveTo(HomePos, time, delay, moveEase);
+        m_correct = false;
+    }
+
+    public void Reset()
+    {
+        transform.position = HomePos;
+        m_correct = false;
+        parked = false;
+        locked = false;
+        gameObject.SetActive(false);
     }
 }

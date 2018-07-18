@@ -6,6 +6,7 @@ public class TileLocation : MonoBehaviour
 {
     public bool occupied = false;
 
+    [SerializeField]
     char m_value;
     public char Value { get { return m_value; } }
 
@@ -22,5 +23,11 @@ public class TileLocation : MonoBehaviour
     public void AssignValue(char letter)
     {
         m_value = letter;
+    }
+
+    public void Reset()
+    {
+        occupied = false;
+        gameObject.SetActive(false);
     }
 }

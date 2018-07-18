@@ -17,16 +17,19 @@ public class PuzzleManager : MonoBehaviour
     List<char> puzzleRandomized = new List<char>();
     char[] puzzle;
     int startLoc;
+    GameManager gameManager;
 
     [SerializeField]
     string fileName;
 
     public TileLocation[] locationTiles;
     public LetterTile[] letterTiles;
+    public char[] alphabet;
 
     void Awake()
     {
         wordList = File.ReadAllLines(fileName);
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     public void StartRound()
@@ -84,6 +87,27 @@ public class PuzzleManager : MonoBehaviour
             startLoc++;
         }
 
+    }
+
+    public bool CheckAnswer()
+    {
+        bool allCorrect = true;
+
+        foreach(LetterTile lT in letterTiles)
+        {
+            if (lT.Correct && !lT.locked)
+            {
+                gameManager.AddScore();
+                lT.locked = true;
+            }
+            else if (!lT.locked)
+            {
+                allCorrect = false;
+                lT.SendHome();
+            }
+        }
+
+        return allCorrect;
     }
 
     private char [] GetPuzzle()
@@ -147,13 +171,12 @@ public class PuzzleManager : MonoBehaviour
     {
         foreach(TileLocation tL in locationTiles)
         {
-            tL.gameObject.SetActive(false);
+            tL.Reset();
         }
 
         foreach(LetterTile lT in letterTiles)
         {
-            lT.transform.position = lT.HomePos;
-            lT.gameObject.SetActive(false);
+            lT.Reset();
         }
     }
 
@@ -168,11 +191,20 @@ public class PuzzleManager : MonoBehaviour
             puzzleList.Add(ch);
         }
 
+        int rand;
+
+        do
+        {
+            rand = Random.Range(0, alphabet.Length); 
+        } while (rand == 16 || rand == 21 || rand == 23 || rand == 24 || rand == 25);
+
+        puzzleList.Add(alphabet[rand]);
+
         letterCount = puzzleList.Count;
 
         do
         {
-            int ran = Random.Range(0, puzzleList.Count - 1);
+            int ran = Random.Range(0, puzzleList.Count);
             randomPuzzle.Add(puzzleList[ran]);
             puzzleList.RemoveAt(ran);
         }
