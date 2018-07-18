@@ -89,9 +89,9 @@ public class PuzzleManager : MonoBehaviour
 
     }
 
-    public bool CheckAnswer()
+    public void CheckAnswer()
     {
-        bool allCorrect = true;
+        //bool allCorrect = true;
 
         foreach(LetterTile lT in letterTiles)
         {
@@ -102,12 +102,12 @@ public class PuzzleManager : MonoBehaviour
             }
             else if (!lT.locked)
             {
-                allCorrect = false;
+                //allCorrect = false;
                 lT.SendHome();
             }
         }
 
-        return allCorrect;
+        //return allCorrect;
     }
 
     private char [] GetPuzzle()
@@ -193,12 +193,16 @@ public class PuzzleManager : MonoBehaviour
 
         int rand;
 
-        do
+        for (int i = 0; i < 2; i++)
         {
-            rand = Random.Range(0, alphabet.Length); 
-        } while (rand == 16 || rand == 21 || rand == 23 || rand == 24 || rand == 25);
+            do
+            {
+                rand = Random.Range(0, alphabet.Length);
+            }
+            while (rand == 16 || rand == 21 || rand == 23 || rand == 24 || rand == 25);
 
-        puzzleList.Add(alphabet[rand]);
+            puzzleList.Add(alphabet[rand]); 
+        }
 
         letterCount = puzzleList.Count;
 

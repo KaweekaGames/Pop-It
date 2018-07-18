@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
     private static bool created = false;
     public Text player1ScoreText;
     public Text player2ScoreText;
+    public Text timer;
+    public int letterScore;
+    public int puzzleScore;
 
     //Get values from options menu
     public float setTimer = 30f;
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour
     public int Round { get { return m_round; } }
 
     bool solved;
+    int numberCorrect;
     PuzzleManager puzzleManager;
 
     void Awake()
@@ -45,7 +49,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        m_timer = setTimer;
         m_maxScore = setMaxScore;
         puzzleManager = FindObjectOfType<PuzzleManager>();
     }
@@ -54,30 +57,50 @@ public class GameManager : MonoBehaviour
     {
         player1ScoreText.text = Player1Score.ToString();
         player2ScoreText.text = Player2Score.ToString();
+        int tempTime = (int)Timer;
+        timer.text = tempTime.ToString();
+
+        if (Timer > 0)
+        {
+            m_timer -= Time.deltaTime; 
+        }
+    }
+
+    public void StartRound()
+    {
+        m_timer = setTimer;
+        puzzleManager.StartRound();
+        m_round = 1;
+        numberCorrect = 0;
     }
 
     public void CheckAnswer()
     {
-        solved = puzzleManager.CheckAnswer();
+        puzzleManager.CheckAnswer();
 
-        if (solved)
+        if (numberCorrect >= puzzleManager.Word.Length)
         {
-            //EndRound
+            PuzzleScore();
+            m_player = 1 - Player;
         }
         else
         {
             m_player = 1 - Player;
             m_round++;
         }
+
+        m_timer = setTimer;
     }
 
     public void AddScore()
     {
-        if(Player == 0)
+        numberCorrect++;
+
+        if (Player == 0)
         {
             if (Round < 5)
             {
-                m_player1Score = Player1Score + (12 - 2 * Round); 
+                m_player1Score = Player1Score + (letterScore - 2 * Round); 
             }
             else
             {
@@ -88,11 +111,37 @@ public class GameManager : MonoBehaviour
         {
             if (Round < 5)
             {
-                m_player2Score = Player2Score + (12 - 2 * Round);
+                m_player2Score = Player2Score + (letterScore - 2 * Round);
             }
             else
             {
                 m_player2Score = Player2Score + 2;
+            }
+        }
+    }
+
+    public void PuzzleScore()
+    {
+        if (Player == 0)
+        {
+            if (Round < 5)
+            {
+                m_player1Score = Player1Score + puzzleScore * puzzleManager.Word.Length;
+            }
+            else
+            {
+                m_player1Score = Player1Score + puzzleScore * puzzleManager.Word.Length/2;
+            }
+        }
+        else
+        {
+            if (Round < 5)
+            {
+                m_player2Score = Player2Score + puzzleScore * puzzleManager.Word.Length;
+            }
+            else
+            {
+                m_player2Score = Player2Score + puzzleScore * puzzleManager.Word.Length / 2;
             }
         }
     }

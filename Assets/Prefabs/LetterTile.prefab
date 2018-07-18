@@ -50,7 +50,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1790523019388086}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -103,8 +103,8 @@ MonoBehaviour:
   constantMoveTime: 0.01
   delay: 0.1
   newPosition: {x: 0, y: 0, z: 0}
-  moveEase: 0
-  colliderTag: letter
+  moveEase: 14
+  colliderTag: tile
   sprites:
   - {fileID: 21300000, guid: aa0d217676c7c564a9fcea8c42905952, type: 3}
   - {fileID: 21300000, guid: 5afcfcd298b97cd489b8dad614ea5d41, type: 3}
@@ -133,6 +133,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f40dd12c556735448b0d64662b1a8dfe, type: 3}
   - {fileID: 21300000, guid: b9bca6a08a94bb246b15c84843b8a5e9, type: 3}
   - {fileID: 21300000, guid: d5a2331321c1a744386c2fa3dd22a34f, type: 3}
+  locked: 0
+  m_value: 0
 --- !u!212 &212702692648104434
 SpriteRenderer:
   m_ObjectHideFlags: 1

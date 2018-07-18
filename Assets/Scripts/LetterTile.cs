@@ -20,6 +20,7 @@ public class LetterTile : MonoBehaviour
     Vector2 parkedPos;
     bool touched = false;
     bool parked = false;
+    BoxCollider2D boxCol;
 
     [SerializeField]
     char m_value;
@@ -37,6 +38,8 @@ public class LetterTile : MonoBehaviour
         targetPos = transform.position;
         m_homePos = transform.position;
         spriteRen = this.GetComponent<SpriteRenderer>();
+        //boxCol = GetComponent<BoxCollider2D>();
+        //boxCol.isTrigger = false;
     }
 
     private void Update()
